@@ -6,10 +6,18 @@ import androidx.lifecycle.ViewModel
 
 class TotalViewModel : ViewModel() {
 
-    private val _total = MutableLiveData<Int>().apply { value = 0 }
-    val total: LiveData<Int> get() = _total
+    private val _total = MutableLiveData<Int>()
+    val total: LiveData<Int> = _total
+
+    init {
+        _total.postValue(0)
+    }
 
     fun incrementTotal() {
-        _total.value = (_total.value ?: 0) + 1
+        _total.postValue((_total.value ?: 0) + 1)
+    }
+
+    fun setTotal(newTotal: Int) {
+        _total.postValue(newTotal)
     }
 }

@@ -3,34 +3,23 @@ package com.example.lab_week_10
 import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
-import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.Observer
 import com.example.lab_week_10.viewmodels.TotalViewModel
 
 class MainActivity : AppCompatActivity() {
-    private val viewModel by lazy {
-        ViewModelProvider(this)[TotalViewModel::class.java]
-    }
+
+    private val viewModel: TotalViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        prepareViewModel()
-    }
-
-    private fun updateText(total: Int) {
-        findViewById<TextView>(R.id.text_total).text =
-            getString(R.string.text_total, total)
-    }
-
-    private fun prepareViewModel(){
-        viewModel.total.observe(this) { total ->
-            updateText(total)
-        }
+        viewModel.total.observe(this, Observer { value ->
+            findViewById<TextView>(R.id.text_total).text =
+                getString(R.string.text_total, value)
+        })
 
         findViewById<Button>(R.id.button_increment).setOnClickListener {
             viewModel.incrementTotal()
